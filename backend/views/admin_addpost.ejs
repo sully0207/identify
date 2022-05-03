@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add post</title>
+    <style>
+        .block{
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <form action="/admin/addPost" method="POST">
+        <h1>Add Item</h1>
+        <fieldset>
+            <legend>General Information</legend>
+            <div>
+                <label class="block" for="name">name</label>
+                <input required class="block" type="text" name="name">
+            </div>
+            <br/>
+            <div>
+                <label class="block" for="description">description</label>
+                <textarea class="block" rows="5" cols="50" name="description"></textarea>
+            </div>
+            <div>
+                <label class="block" for="additionalAllergyInformation">additional allergy information</label>
+                <textarea class="block" rows="5" cols="50" name="additionalAllergyInformation"></textarea>
+            </div>
+            <div>
+                <label class="block" for="ingredients">ingredients</label>
+                <textarea required class="block" rows="5" cols="50" name="ingredients"></textarea>
+                <small>ingredients seperated by , (commas) except in commas</small>
+            </div>
+            <div>
+                <label class="block" for="netContent">net content(g)</label>
+                <input required class="block" step="any" type="number" name="netContent">
+            </div>
+            <div>
+                <label class="block" for="portionSize">portion size(g)</label>
+                <input required class="block" type="number" step="any" name="portionSize">
+            </div>
+        </fieldset>
+        <br/>
+        <fieldset>
+            <legend>Key Allergens</legend>
+            <div>
+              <input type="checkbox" name="celery">
+              <label for="celery">celery</label>
+            </div>
+            <fieldset>
+                <legend>Cereals Containing Gluten</legend>
+                <div>
+                  <input type="checkbox" name="wheat">
+                  <label for="wheat">wheat</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="rye">
+                    <label for="rye">rye</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="barley">
+                    <label for="barley">barley</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="oats">
+                    <label for="oats">oats</label>
+                </div>
+            </fieldset>
+            <div>
+                <input type="checkbox" name="crustaceans">
+                <label for="crustaceans">crustaceans</label>
+            </div>
+            <div>
+                <input type="checkbox" name="eggs">
+                <label for="eggs">eggs</label>
+            </div>
+            <div>
+                <input type="checkbox" name="fish">
+                <label for="fish">fish</label>
+            </div>
+            <div>
+                <input type="checkbox" name="lupin">
+                <label for="lupin">lupin</label>
+            </div>
+            <div>
+                <input type="checkbox" name="milk">
+                <label for="milk">milk</label>
+            </div>
+            <div>
+                <input type="checkbox" name="molluscs">
+                <label for="molluscs">molluscs</label>
+            </div>
+            <div>
+                <input type="checkbox" name="mustard">
+                <label for="mustard">mustard</label>
+            </div>
+            <div>
+                <input type="checkbox" name="peanuts">
+                <label for="peanuts">peanuts</label>
+            </div>
+            <div>
+                <input type="checkbox" name="sesame">
+                <label for="sesame">sesame</label>
+            </div>
+            <div>
+                <input type="checkbox" name="soybeans">
+                <label for="soybeans">soybeans</label>
+            </div>
+            <div>
+                <input type="checkbox" name="sulphureDioxideAndSulphites">
+                <label for="sulphureDioxideAndSulphites">sulphure dioxide and sulphites</label>
+            </div>
+            <fieldset>
+                <legend>Tree Nuts</legend>
+                <div>
+                  <input type="checkbox" name="almond">
+                  <label for="almond">almond</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="hazelnut">
+                    <label for="hazelnut">hazelnut</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="walnut">
+                    <label for="walnut">walnut</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="cashewNut">
+                    <label for="cashewNut">cashewNut</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="pecanNut">
+                    <label for="pecanNut">pecanNut</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="brazilNut">
+                    <label for="brazilNut">brazilNut</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="pistachioNut">
+                    <label for="pistachioNut">pistachioNut</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="macadamiaNut">
+                    <label for="macadamiaNut">macadamiaNut</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="QueenslandNut">
+                    <label for="QueenslandNut">QueenslandNut</label>
+                </div>
+            </fieldset>
+        </fieldset>
+        <br/>
+        <fieldset>
+            <legend>Other Requirements</legend>
+            <div>
+              <input type="checkbox" name="isVegetarian">
+              <label for="isVegetarian">vegetarian</label>
+            </div>
+            <div>
+                <input type="checkbox" name="isVegan">
+                <label for="isVegan">vegan</label>
+            </div>
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend>Nutritional Information</legend>
+            <select required name="perValue">
+                <option selected value="100g">per 100g</option>
+                <option value="100ml">per 100ml</option>            
+                <option value="portion">per portion</option>
+            </select>
+            <div>
+                <label class="block" for="energyValueKj">energyValueKj</label>
+                <input required class="block" type="number" step="any" name="energyValueKj">
+            </div>
+            <div>
+                <label class="block" for="energyValueKcal">energyValueKcal</label>
+                <input required class="block" type="number" step="any" name="energyValueKcal">
+            </div>
+            <p class="block">All values below are in grams</p>
+            <div>
+                <label class="block" for="fat">fat</label>
+                <input required class="block" type="number" step="any" name="fat">
+            </div>
+            <div>
+                <label class="block" for="saturates">saturates</label>
+                <input required class="block" type="number" step="any" name="saturates">
+            </div>
+            <div>
+                <label class="block" for="carbohydrates">carbohydrates</label>
+                <input required class="block" type="number" step="any" name="carbohydrates">
+            </div>
+            <div>
+                <label class="block" for="sugar">sugar</label>
+                <input required class="block" type="number" step="any" name="sugar">
+            </div>
+            <div>
+                <label class="block" for="protein">protein</label>
+                <input required class="block" type="number" step="any" name="protein">
+            </div>
+            <div>
+                <label class="block" for="salt">salt</label>
+                <input required class="block" type="number" step="any" name="salt">
+            </div>
+        </fieldset>
+        <button type="submit">Submit</button>  
+    </form>
+</body>
+</html>
