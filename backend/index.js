@@ -12,7 +12,7 @@ const userRoute = require("./routes/user");
 const scanItemRoute = require("./routes/scanItem");
 //Initialisations
 const app = express();
-const port = process.env.PORT
+const port = process.env.PORT || 8001;
 const publicDir = path.join(__dirname,'public');
 
 //App middleware and init
