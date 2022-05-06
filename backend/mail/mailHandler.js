@@ -1,7 +1,5 @@
 //import node mailer
 const nodemailer = require("nodemailer");
-let hbs = require('nodemailer-express-handlebars');
-
 /*
     # This function handles all the outgoing mail
     # The arguments it takes are as follows

@@ -20,7 +20,7 @@ const ResetToken = require("../models/ResetToken");
 */
 const sendToken = (user,res) =>{
     const token = jwt.sign({_id:user._id},process.env.JWT_SECRET);
-    res.header('auth-token',token).send(token);
+    res.header('auth-token',token).json({"success":true});
 }
 
 //REGISTER METHODS ==============================================================================================================================================================================
@@ -43,13 +43,14 @@ router.post("/register", async (req,res)=>{
                 email:req.body.email,
                 password:encryptedPassword,
             });
-            res.status(201).json(user);
+            sendToken(user,res);
+            return;
         } catch (err) { //In case of error such as validation, return it to the user
             const error = handleRegisterErrors(err);
             res.status(400).json(error);
         }		
     }else{//As the password is hashed its not possible for mongoose validation to validate its length so its done manually and returns a similar error message as the handle error function
-        res.status(400).json({error:[{type:"password",message:"Minimum password length is 8 characters.",}]});
+        res.status(400).json({error:[{type:"Password",message:"Minimum password length is 8 characters.",}]});
         return;
     }
 });
@@ -89,21 +90,21 @@ router.post("/login", async (req,res)=>{
     //Validation - if failed return error with message
     //Check if username is blank
     if(req.body.username===""||req.body.username===null){
-        res.status(400).json({error:[{type:"username",message:"This field cannot be blank.",}]});
+        res.status(400).json({error:[{type:"Username",message:"This field cannot be blank.",}]});
     }else{
         //Check if password is blank
         if(req.body.password===""||req.body.password===null){
-            res.status(400).json({error:[{type:"password",message:"This field cannot be blank.",}]});
+            res.status(400).json({error:[{type:"Password",message:"This field cannot be blank.",}]});
         }else{
             //search for user using their username, if not found return error message
             const user = await User.findOne({username:req.body.username}).select('+password');
             if(!user){
-                res.status(400).json({error:[{type:"login",message:"Username or password is incorrect.",}]});
+                res.status(400).json({error:[{type:"Login",message:"Username or password is incorrect.",}]});
             }else{ 
                 //If user is found compare given password with stored to grant auth - compared with bcrypt as the db password as thats how its stored
                 const correctPassword = await bcrypt.compare(req.body.password,user.password);
                 if(!correctPassword){
-                    res.status(400).json({error:[{type:"login",message:"Username or password is incorrect.",}]});
+                    res.status(400).json({error:[{type:"Login",message:"Username or password is incorrect.",}]});
                 }else{
                     //create and assign a token
                     sendToken(user,res);
@@ -128,17 +129,17 @@ router.post("/requestPasswordReset",async (req,res)=>{
             await ResetToken.create({
                 token:token,
             });
-            const mailSuccess = await sendResetMail(user.email,"Identify Password Reset",`http://localhost:8001/api/auth/resetPassword?token=${token}`);
+            const mailSuccess = await sendResetMail(user.email,`${user.username}: Identify Password Reset`,`https://identify-app.herokuapp.com//api/auth/resetPassword?token=${token}`);
             if(mailSuccess){
-                res.status(200).json({success:[{type:"reset password",message:"If the email is valid you will receieve an email with a reset password link.",}]});
+                res.status(200).json({success:[{type:"Reset password",message:"If the email is valid you will receieve an email with a reset password link.",}]});
             }else{
-                res.status(500).json({error:[{type:"email",message:"There was an error sending your request. Please try again.",}]});
+                res.status(500).json({error:[{type:"Email",message:"There was an error sending your request. Please try again.",}]});
             }
         }else{//Even if there is no email we send them the reponse that if there is an email with that account they will receieve an email, this is so no once can know if an email has an account
-            res.status(200).json({success:[{type:"reset password",message:"If the email is valid you will receieve an email with a reset password link.",}]});
+            res.status(200).json({success:[{type:"Reset password",message:"If the email is valid you will receieve an email with a reset password link.",}]});
         }
     }else{
-        res.status(400).json({error:[{type:"email",message:"Please enter a valid email.",}]});
+        res.status(400).json({error:[{type:"Email",message:"Please enter a valid email.",}]});
     }
 });
 
@@ -210,7 +211,7 @@ router.post("/resetPassword/submit",async (req,res)=>{
 router.post("/changePassword",auth,async (req,res)=>{
     if(req.body.newPassword && req.body.newPassword.length>=8){
         const user = await changePassword(req.user,req.body.newPassword)
-        res.json(user);
+        res.json({success:"Password changed successfully"});
     }else{//As the newpassword is hashed its not possible for mongoose validation to validate its length so its done manually and returns a similar error message as the handle error function
         res.status(400).json({error:[{type:"password",message:"Minimum password length is 8 characters.",}]});
     }

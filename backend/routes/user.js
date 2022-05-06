@@ -94,9 +94,9 @@ router.put("/editCustomKeywords",auth,async (req,res)=>{
         let user = await User.findOne({_id:req.user});
         user.customKeywords = customKeywords;
         user.save();
-        res.json(user);
+        res.json(customKeywords);
     }else{
-        res.status(400).json({error:[{type:"custom keywords",message:"no list given.",}]});
+        res.status(400).json({error:[{type:"Custom keywords",message:"no list given.",}]});
     }
 });
 
@@ -127,7 +127,8 @@ router.get("/getUserData",auth, async (req,res)=>{
     const allowedRequests = ["username","keyAllergens","email","isVegan","isVegetarian","itemHistory","customKeywords"];
     try{
         const response = {};
-        const user = await User.findOne({_id:req.user});
+        const user = await User.findOne({_id:req.user}).populate("itemHistory");
+        response['_id'] =  user._id;
         //go through all the requests
         requests.map((request)=>{
             allowedRequests.map((allowedRequest)=>{

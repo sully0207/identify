@@ -29,17 +29,17 @@ router.post("/",auth,async (req,res)=>{
             user.save();
             console.log(user.itemHistory);
             res.json({
-                veganMatching:((item.isVegan)&&(user.isVegan)),
+                vegan:((item.isVegan)&&(user.isVegan)),
                 vegetarian:((item.isVegetarian)&&(user.isVegetarian)),
                 matchingIngredients:matchingIngredients,
                 matchingAllergens:matchingAllergens,
                 item:item,
             });
         }catch(err){
-            res.status(400).json({error:[{type:"item",message:"Invalid item tag scanned",}]});
+            res.status(400).json({error:[{type:"Item",message:"Invalid item tag scanned",}]});
         }
     }else{
-        res.status(400).json({error:[{type:"item",message:"No item ID received",}]});
+        res.status(400).json({error:[{type:"Item",message:"No item ID received",}]});
     }
 });
 
@@ -50,12 +50,10 @@ router.post("/",auth,async (req,res)=>{
 const compareItemtoUserAllergen = (itemAllergens,userAllergens) =>{
     const matchingAllergens = {
         celery:(itemAllergens.celery&&userAllergens.celery),
-        cerealsContainingGluten:{
-            wheat:(itemAllergens.cerealsContainingGluten.wheat&&userAllergens.cerealsContainingGluten.wheat),
-            rye:(itemAllergens.cerealsContainingGluten.rye&&userAllergens.cerealsContainingGluten.rye),
-            barley:(itemAllergens.cerealsContainingGluten.barley&&userAllergens.cerealsContainingGluten.barley),
-            oats:(itemAllergens.cerealsContainingGluten.oats&&userAllergens.cerealsContainingGluten.oats),
-        },
+        wheat:(itemAllergens.cerealsContainingGluten.wheat&&userAllergens.cerealsContainingGluten.wheat),
+        rye:(itemAllergens.cerealsContainingGluten.rye&&userAllergens.cerealsContainingGluten.rye),
+        barley:(itemAllergens.cerealsContainingGluten.barley&&userAllergens.cerealsContainingGluten.barley),
+        oats:(itemAllergens.cerealsContainingGluten.oats&&userAllergens.cerealsContainingGluten.oats),
         crustaceans:(itemAllergens.crustaceans&&userAllergens.crustaceans),
         eggs:(itemAllergens.eggs&&userAllergens.eggs),
         fish:(itemAllergens.fish&&userAllergens.fish),
@@ -67,20 +65,23 @@ const compareItemtoUserAllergen = (itemAllergens,userAllergens) =>{
         sesame:(itemAllergens.sesame&&userAllergens.sesame),
         soybeans:(itemAllergens.soybeans&&userAllergens.soybeans),
         sulphureDioxideAndSulphites:(itemAllergens.sulphureDioxideAndSulphites&&userAllergens.sulphureDioxideAndSulphites),
-        treeNuts:{
-            almond:(itemAllergens.treeNuts.almond&&userAllergens.treeNuts.almond),
-            hazelnut:(itemAllergens.treeNuts.hazelnut&&userAllergens.treeNuts.hazelnut),
-            walnut:(itemAllergens.treeNuts.walnut&&userAllergens.treeNuts.walnut),
-            cashewNut:(itemAllergens.treeNuts.cashewNut&&userAllergens.treeNuts.cashewNut),
-            pecanNut:(itemAllergens.treeNuts.pecanNut&&userAllergens.treeNuts.pecanNut),
-            brazilNut:(itemAllergens.treeNuts.brazilNut&&userAllergens.treeNuts.brazilNut),
-            pistachioNut:(itemAllergens.treeNuts.pistachioNut&&userAllergens.treeNuts.pistachioNut),
-            macadamiaNut:(itemAllergens.treeNuts.macadamiaNut&&userAllergens.treeNuts.macadamiaNut),
-            QueenslandNut:(itemAllergens.treeNuts.QueenslandNut&&userAllergens.treeNuts.QueenslandNut),
-        }
-    };
-    return matchingAllergens;
+        almond:(itemAllergens.treeNuts.almond&&userAllergens.treeNuts.almond),
+        hazelnut:(itemAllergens.treeNuts.hazelnut&&userAllergens.treeNuts.hazelnut),
+        walnut:(itemAllergens.treeNuts.walnut&&userAllergens.treeNuts.walnut),
+        cashewNut:(itemAllergens.treeNuts.cashewNut&&userAllergens.treeNuts.cashewNut),
+        pecanNut:(itemAllergens.treeNuts.pecanNut&&userAllergens.treeNuts.pecanNut),
+        brazilNut:(itemAllergens.treeNuts.brazilNut&&userAllergens.treeNuts.brazilNut),
+        pistachioNut:(itemAllergens.treeNuts.pistachioNut&&userAllergens.treeNuts.pistachioNut),
+        macadamiaNut:(itemAllergens.treeNuts.macadamiaNut&&userAllergens.treeNuts.macadamiaNut),
+        QueenslandNut:(itemAllergens.treeNuts.QueenslandNut&&userAllergens.treeNuts.QueenslandNut),
+    }
+    //return only matching
+    const OnlyMatching = Object.keys(matchingAllergens).filter(function(x){
+        return matchingAllergens[x] !==false;
+    })
+    return OnlyMatching;
 };
+
 /*
   # Method that take in two string arrays, one of ingredients, and one of keywords
   # Purpose is to find matching keywords in the ingredients and return those keywords
